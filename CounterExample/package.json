@@ -1,0 +1,24 @@
+{
+  "name": "proyectocontador-prueba-ui",
+  "version": "1.0.0",
+  "description": "",
+  "main": "truffle.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sofia Vidal",
+  "license": "ISC",
+  "dependencies": {
+    "next": "^5.1.0",
+    "react-dom": "^16.3.2",
+    "recat": "0.0.0",
+    "truffle-contract": "^3.0.5",
+    "web3": "^0.19.1"
+  }
+}
