@@ -14,6 +14,9 @@ export default class App extends React.Component{
 			event: null, 
 		});
 		this.incrementClick = this.incrementClick.bind(this);
+		//this.createEvents = this.createEvents.bind(this);
+		//this.state.event = this.state.contrato.Increment();
+		//this.watchEvent = this.state.watchEvent.bind(this);
 	}
 
 	/*
@@ -48,7 +51,6 @@ export default class App extends React.Component{
 			/*contrato: contrato, */
 			event: event,
 			cuenta: null,
-			filter: null,
 		});	
 
 		// LANZAMOS WATCH
@@ -62,11 +64,6 @@ export default class App extends React.Component{
 				console.log("Count was incremented by: " + event.args.who);
 				console.log("The counter has been updated up to: " + event.args.amount);
 				//return event.args.amount;
-				// AQUI DEBERÍA IR LA ACTUALIZACION DEL ESTADO, de la variable cuenta que mostraria el dom
-				// cada vez que se detecta un evento- es decir que se ha pulsado incrementar
-				// se jejuta este trozo , es decir las lineas de codigo dentro del watch
-				//  pero no puedo ni llamar a funciones de la clase App ni devilver un resultado
-
 			}
 		});
 		console.log("event watch has been started");
@@ -121,12 +118,10 @@ export default class App extends React.Component{
 
 	render(){
 
-		console.log(this.state.cuenta);
-
 		return (
 			<div>
 				<h1> Page under construction </h1>
-				<h4> El contado está a : {this.state.cuenta} </h4>
+				<h4> El contado está a : </h4>
 				<button onClick={this.incrementClick}>Increment</button>				
 			</div>
 		);
