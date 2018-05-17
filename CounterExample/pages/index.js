@@ -3,13 +3,30 @@ import { default as Web3} from 'web3';
 import contractArtifact from '../build/contracts/CounterEvents.json'
 import { default as contract } from 'truffle-contract'
 
+
+
+// TODO ESTO SOBRA PORQUE USAMOS LA EXTENSION METAMASK
+var web3;
+
+if (typeof web3 !== 'undefined') {
+	web3 = new Web3(web3.currentProvider);
+} else {
+	//  Especificamos el provider 
+	// empleando chrome con MetaMask el provider es injectado automaticamente
+	web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"))
+}
+
+var account = web3.eth.accounts[0];
+
 export default class App extends React.Component{
 
+	/*
+	* CONSTRUCTOR , se define el estado 
+	*/
 	constructor(props){
 		super(props);
 		this.state = ({
 			counterContract: null,
-			/*contrato: null, */
 			cuenta: null,
 			event: null, 
 		});
@@ -22,89 +39,64 @@ export default class App extends React.Component{
 
 	async componentWillMount(){
 
-		// TODO ESTO SOBRA PORQUE USAMOS LA EXTENSION METAMASK
-		var web3;
-		if (typeof web3 !== 'undefined') {
-			web3 = new Web3(web3.currentProvider);
-		} else {
-			//  Especificamos el provider 
-			// empleando chrome con MetaMask el provider es injectado automaticamente
-			web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"))
-		} 
-
-		var theContractInstance = contract(contractArtifact);
-		theContractInstance.setProvider(web3.currentProvider);
+		var theContract= contract(contractArtifact);
+		theContract.setProvider(web3.currentProvider);
 
 		// CONTRATO		
 		var contrato = await theContractInstance.deployed(); // ESTO YA ME GUARDA EL CONTRATO
 		//console.log(contrato);
 
+		//CUENTA
+		var cuenta = await contrato.count();
+		console.log("CUENTA = "  + cuenta + " atributo Smart Contract");
+
 		// EVENTO 
 		var event = contrato.Increment();
 		//console.log(event);		
 
-		this.setState({
-			counterContract: theContractInstance,
-			/*contrato: contrato, */
-			event: event,
-			cuenta: null,
-			filter: null,
-		});	
-
 		// LANZAMOS WATCH
-		event.watch(function(err, event){
+		event.watch((err, event) => {
 			//console.log(event);
 			if (err){
+				console.log("An error has occurred")
 				console.log(err);
 			} else {
 				console.log("This is the event!");
-				console.log(event);
+				//console.log(event);
 				console.log("Count was incremented by: " + event.args.who);
 				console.log("The counter has been updated up to: " + event.args.amount);
-				//return event.args.amount;
-				// AQUI DEBERÍA IR LA ACTUALIZACION DEL ESTADO, de la variable cuenta que mostraria el dom
-				// cada vez que se detecta un evento- es decir que se ha pulsado incrementar
-				// se jejuta este trozo , es decir las lineas de codigo dentro del watch
-				//  pero no puedo ni llamar a funciones de la clase App ni devilver un resultado
-
+				
+				// Actualizamos el valor del contador tras recibir el evento
+				this.setState({
+					cuenta: event.args.amount.valueOf(),
+				});
 			}
 		});
+
 		console.log("event watch has been started");
-	} 
+
+		this.setState({
+			counterContract: theContract,
+			event: event,
+			cuenta: ceunta.valueOf(), /* No se ha actualizado antes ? */ 
+		});	
+		
+	}
 
 	/*
 	* metodo que incrementa el countador 
 	*/
 	incrementClick(){
 
-		var instancia = this.state.counterContract;
+		console.log("SE HA PULSADO INCREMENTAR")
 
-		// ESTO SE QUITARIA DE MODO QUE EL USUARIO PAGA POR INCREMENTAR A TRAVES DE METAMASK
-		//  para esta prueba se deja así para no tener que estar empleando metamask y ser mas rápido
-		var web3;
-			if (typeof web3 !== 'undefined') {
-				web3 = new Web3(web3.currentProvider);
-			} else {
-				//  Especificamos el provider 
-				// empleando chrome con MetaMask el provider es injectado automaticamente
-				web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"))
-			} 
-
-			//console.log(web3.eth.accounts);
-			var account = web3.eth.accounts[0];
-		//
-
-		instancia.deployed().then(function(instanciaContrato){
-			return instanciaContrato.increment({from: account, gas:200000}).then(function(res, err){
-				if(err){
-					console.log("ERROR");
-					console.log(err);
-					//return error(err);
-				} else {
-					console.log("+1 succes");
-				}				
-			});
-		});	
+		this.state.increment({from: account, gas:200000})
+		.then(res =>{
+			onsole.log("+1 succes");
+		}).catch( err => {
+			console.log("ERROR: Couldn't increment counter");
+			console.log(err);
+		});
 	}
 
 
@@ -112,7 +104,6 @@ export default class App extends React.Component{
 	* Invocado inmediatamente antes de que un componente se desmonte del DOM
 	*/
 	componentWillUnmount(){
-
 		// TEAR DOWN WATCH
 		this.state.event.stopWatching();
 		console.log("watch has been tore down");
@@ -122,6 +113,7 @@ export default class App extends React.Component{
 	render(){
 
 		console.log(this.state.cuenta);
+		//console.log(this.state.event);
 
 		return (
 			<div>

@@ -1,0 +1,75 @@
+	// quitar watch
+	// en will mountlanzar watch
+	// will (did)contrato y provider
+	// los eventos 
+	//aunmount me cargo los watchs
+// -----------------------------------------------------------------------------------------
+
+
+	/*
+	* Invocado 1 vez despues del renderizado
+	*/
+	componentDidMount() {
+		// LANZAR WATCH / SET UP WATCH		
+		/*this.state.event.watch(function(err, event){
+			//console.log(event);
+			if (err){
+				console.log(err);
+			} else {
+				console.log("This is the event!");
+				console.log(event);
+				console.log("Count was incremented by: " + event.args.who);
+				console.log("The counter has been updated up to: " + event.args.amount);
+				//return event.args.amount;
+			}				
+		});*/
+
+
+		/*if (this.state.event != null) {
+			//var counter = this.watchEvent();
+			//console.log("AQUII" + counter);
+			var counter = await this.state.event.watch(function(err, event){
+				//console.log(event);
+				if (err){
+					console.log(err);
+				} else {
+					console.log("This is the event!");
+					console.log(event);
+					console.log("Count was incremented by: " + event.args.who);
+					console.log("The counter has been updated up to: " + event.args.amount);
+					return event.args.amount;
+				}				
+			});
+			console.log("caca");
+			console.log("COUNTER" + counter);
+			this.setState({
+				cuenta: counter,
+			});
+		}*/
+	} 
+
+// --------------------------------------------------------------------------------------------------------------------
+
+EN RENDER
+
+		/*
+		//console.log(this.state.event); 
+		if (this.state.event != null) {
+			//var counter = this.watchEvent();
+			//console.log("AQUII" + counter);
+			var counter = this.state.event.watch(function(err, event){
+				//console.log(event);
+				if (err){
+					console.log(err);
+				} else {
+					console.log("This is the event!");
+					console.log(event);
+					console.log("Count was incremented by: " + event.args.who);
+					console.log("The counter has been updated up to: " + event.args.amount);
+					//return event.args.amount;
+					return "hola";
+				}				
+			});
+			console.log("COUNTER");
+			console.log(counter);
+		}	*/
